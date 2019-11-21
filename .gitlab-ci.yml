@@ -1,9 +1,15 @@
 stages:
 - build
 
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
 base:
   stage: build
-  images: docker:19.03.1-dind
+  image: docker:19.03.1
+  services:
+  - docker:19.03.0-dind
   before_script:
   - docker info
   script:
