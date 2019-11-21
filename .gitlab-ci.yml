@@ -1,0 +1,11 @@
+stages:
+- build
+
+base:
+  stage: build
+  images: docker:19.03.1-dind
+  before_script:
+  - docker info
+  script:
+  - docker build --target go_base -t registry.gitlab.com/micro-buzz/golang-can:base .
+  - docker push registry.gitlab.com/micro-buzz/golang-can
