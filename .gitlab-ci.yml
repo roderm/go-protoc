@@ -16,6 +16,19 @@ base:
 >>>>>>> Update .gitlab-ci.yml
   before_script:
   - docker info
+  - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   script:
   - docker build --target go_base -t registry.gitlab.com/micro-buzz/golang-can:base .
+  - docker push registry.gitlab.com/micro-buzz/golang-can
+
+proto:
+  stage: build
+  image: docker:19.03.1
+  services:
+  - docker:19.03.0-dind
+  before_script:
+  - docker info
+  - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD
+  script:
+  - docker build --target protoc -t registry.gitlab.com/micro-buzz/golang-can:proto .
   - docker push registry.gitlab.com/micro-buzz/golang-can
