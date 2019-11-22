@@ -18,7 +18,7 @@ base:
   - docker info
   - docker login registry.gitlab.com -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   script:
-  - docker build registry.gitlab.com --target go_base -t registry.gitlab.com/micro-buzz/golang-can:base .
+  - docker build --target go_base -t registry.gitlab.com/micro-buzz/golang-can:base .
   - docker push registry.gitlab.com/micro-buzz/golang-can
 
 proto:
@@ -30,5 +30,5 @@ proto:
   - docker info
   - docker login registry.gitlab.com -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   script:
-  - docker build registry.gitlab.com --target protoc -t registry.gitlab.com/micro-buzz/golang-can:proto .
+  - docker build --target protoc -t registry.gitlab.com/micro-buzz/golang-can:proto .
   - docker push registry.gitlab.com/micro-buzz/golang-can
