@@ -34,3 +34,10 @@ RUN curl -L ${URL} -o /tmp/protoc.tar.gz && \
     make check && \
     make install && \
     ldconfig
+
+FROM protoc AS vue
+
+RUN apt-get update && \
+    apt-get install -y \
+    npm
+RUN npm install -g @vue/cli
