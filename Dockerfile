@@ -3,7 +3,8 @@ FROM ubuntu:latest AS go_base
 ENV URL https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz
 RUN apt-get update -y && \
     apt-get install -y \
-    curl
+    curl \
+    git
 
 ## install go binary
 RUN curl -L $URL -o /tmp/golang.tar.gz && \
