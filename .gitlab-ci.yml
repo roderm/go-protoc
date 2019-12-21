@@ -42,5 +42,5 @@ npm:
   - docker info
   - docker login registry.gitlab.com -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   script:
-  - docker build --target npm -t registry.gitlab.com/micro-buzz/golang-can:npm .
+  - docker build --target vue -t registry.gitlab.com/micro-buzz/golang-can:vue .
   - docker push registry.gitlab.com/micro-buzz/golang-can  
