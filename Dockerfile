@@ -8,8 +8,10 @@ RUN apt-get update -y && \
 
 ## install go binary
 RUN curl -L $URL -o /tmp/golang.tar.gz && \
-    tar -C /usr/local -xzf /tmp/golang.tar.gz && \
-    echo "PATH=\"$PATH:/usr/local/go/bin\"" > /etc/environment
+    tar -C /usr/local -xzf /tmp/golang.tar.gz
+
+ENV GOPATH /golang
+ENV PATH $PATH:/usr/local/go/bin
 
 FROM go_base AS protoc
 
