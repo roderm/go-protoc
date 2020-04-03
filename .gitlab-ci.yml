@@ -7,13 +7,9 @@ variables:
 
 base:
   stage: build
-<<<<<<< HEAD
   image: docker:19.03.1
   services:
   - docker:19.03.0-dind
-=======
-  image: docker:19.03.1-dind
->>>>>>> Update .gitlab-ci.yml
   before_script:
   - docker info
   - docker login registry.gitlab.com -u $REGISTRY_USER -p $REGISTRY_PASSWORD
