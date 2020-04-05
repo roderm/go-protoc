@@ -24,8 +24,8 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
+      - uses: actions/checkout@v2
       - name: Build :latest
-        uses: actions/checkout@v2
         if: success()
         run: docker build -t ${GITHUB_REPOSITORY}:latest .
 
