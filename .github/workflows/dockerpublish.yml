@@ -16,7 +16,7 @@ jobs:
     # Ensure test job passes before pushing image.
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    # if: github.event_name == 'push'
 
     steps:
       - uses: actions-hub/docker/login@master      
@@ -25,6 +25,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build :latest
+        uses: actions/checkout@v2
         if: success()
         run: docker build -t ${GITHUB_REPOSITORY}:latest .
 
