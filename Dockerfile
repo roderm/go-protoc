@@ -6,7 +6,7 @@ ENV GOPATH /golang
 ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin/
 RUN mkdir -p ${GOPATH}/bin && \
     mkdir -p ${GOPATH}/pkg && \
-    mkdir -p${GOPATH}/src
+    mkdir -p ${GOPATH}/src
 RUN apt-get update -y && \
 apt-get install -y \
 curl \
