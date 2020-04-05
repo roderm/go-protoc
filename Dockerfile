@@ -1,17 +1,20 @@
 FROM ubuntu:latest AS go_base
 
 ENV URL https://dl.google.com/go/go1.14.1.linux-amd64.tar.gz
+
+ENV GOPATH /golang
+ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin/
+RUN mkdir -p ${GOPATH}/bin && \
+    mkdir -p ${GOPATH}/pkg && \
+    mkdir -p${GOPATH}/src
 RUN apt-get update -y && \
-    apt-get install -y \
-    curl \
-    git
+apt-get install -y \
+curl \
+git
 
 ## install go binary
 RUN curl -L $URL -o /tmp/golang.tar.gz && \
     tar -C /usr/local -xzf /tmp/golang.tar.gz
-
-ENV GOPATH /golang
-ENV PATH $PATH:/usr/local/go/bin
 
 FROM go_base AS protoc
 
@@ -35,9 +38,5 @@ RUN curl -L ${URL} -o /tmp/protoc.tar.gz && \
     make install && \
     ldconfig
 
-FROM protoc AS vue
-
-RUN apt-get update && \
-    apt-get install -y \
-    npm
-RUN npm install -g @vue/cli
+## go bins 
+RUN go get -u github.com/golang/protobuf/protoc-gen-go
