@@ -16,12 +16,15 @@ git
 RUN curl -L $URL -o /tmp/golang.tar.gz && \
     tar -C /usr/local -xzf /tmp/golang.tar.gz
 
+## cleanup
+RUN rm -rf /tmp/* /var/lib/apt/lists/*
+
 FROM go_base AS protoc
 
 ENV PROTO_VERSION 3.11.4
 ENV URL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTO_VERSION}/protobuf-all-${PROTO_VERSION}.tar.gz
 
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
     autoconf \
     automake \
     libtool \
@@ -40,3 +43,6 @@ RUN curl -L ${URL} -o /tmp/protoc.tar.gz && \
 
 ## go bins 
 RUN go get -u github.com/golang/protobuf/protoc-gen-go
+
+## cleanup
+RUN rm -rf /tmp/* /var/lib/apt/lists/*
