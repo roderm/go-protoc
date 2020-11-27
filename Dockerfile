@@ -1,6 +1,6 @@
-FROM ubuntu:latest AS go_base
+FROM ubuntu:latest AS builder
 
-ENV URL https://dl.google.com/go/go1.14.1.linux-amd64.tar.gz
+ENV URL https://dl.google.com/go/go1.15.5.linux-amd64.tar.gz
 
 ENV GOPATH /golang
 ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin/
@@ -8,44 +8,31 @@ RUN mkdir -p ${GOPATH}/bin && \
     mkdir -p ${GOPATH}/pkg && \
     mkdir -p ${GOPATH}/src
 RUN apt-get update -y && \
-apt-get install -y \
-curl \
-git
+    apt-get install -y \
+    curl \
+    git \
+    unzip
 
 ## install go binary
 RUN curl -L $URL -o /tmp/golang.tar.gz && \
     tar -C /usr/local -xzf /tmp/golang.tar.gz
 
-## cleanup
-RUN rm -rf /tmp/* /var/lib/apt/lists/*
 
-FROM go_base AS protoc
+ENV PROTO_VERSION 3.14.0
+ENV URL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip
 
-ENV PROTO_VERSION 3.11.4
-ENV URL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTO_VERSION}/protobuf-all-${PROTO_VERSION}.tar.gz
+RUN curl -L ${URL} -o /tmp/protoc.zip && \
+    unzip /tmp/protoc.zip -d /usr/local/ -x readme.txt && \
+    chmod +x /usr/local/bin/protoc
 
-RUN apt-get update && apt-get install -y \
-    autoconf \
-    automake \
-    libtool \
-    make \
-    g++ \
-    unzip
-
-RUN curl -L ${URL} -o /tmp/protoc.tar.gz && \
-    tar -C /tmp/ -zxvf /tmp/protoc.tar.gz && \
-    cd /tmp/protobuf-${PROTO_VERSION} && \
-    ./configure && \
-    make && \
-    make check && \
-    make install && \
-    ldconfig
+## gopls
+RUN go get -v golang.org/x/tools/gopls
 
 ## go bins 
 RUN go get -u github.com/golang/protobuf/protoc-gen-go
 
 ## grpc web extension
-ENV GRPC_WEB_VERSION 1.0.7
+ENV GRPC_WEB_VERSION 1.2.1
 ENV GRPC_WEB https://github.com/grpc/grpc-web/releases/download/${GRPC_WEB_VERSION}/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64
 RUN curl ${GRPC_WEB} -o /usr/local/bin/protoc-gen-grpc-web && \
     chmod +x /usr/local/bin/protoc-gen-grpc-web
