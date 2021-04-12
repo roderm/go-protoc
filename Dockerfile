@@ -1,6 +1,6 @@
 FROM ubuntu:latest AS builder
 
-ENV URL https://dl.google.com/go/go1.15.5.linux-amd64.tar.gz
+ENV URL https://dl.google.com/go/go1.16.3.linux-amd64.tar.gz
 
 ENV GOPATH /golang
 ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin/
@@ -18,7 +18,7 @@ RUN curl -L $URL -o /tmp/golang.tar.gz && \
     tar -C /usr/local -xzf /tmp/golang.tar.gz
 
 
-ENV PROTO_VERSION 3.14.0
+ENV PROTO_VERSION 3.15.8
 ENV URL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip
 
 RUN curl -L ${URL} -o /tmp/protoc.zip && \
