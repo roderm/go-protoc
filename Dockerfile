@@ -26,9 +26,8 @@ RUN curl -L ${PROTO_URL} -o /tmp/protoc.zip && \
     chmod +x /usr/local/bin/protoc
 
 ENV BUF_VERSION 1.0.0-rc10
-ENV BUF_URL https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)
 RUN curl -L \
-    ${BUF_URL} \
+    https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-LINUX-$(uname -m) \
     -o "/usr/local/bin/buf" && \
   chmod +x "/usr/local/bin/buf"
 
@@ -36,13 +35,9 @@ RUN curl -L \
 RUN go get -v golang.org/x/tools/gopls
 
 ## go bins 
-RUN go get -u github.com/golang/protobuf/protoc-gen-go
-
-## grpc web extension
-ENV GRPC_WEB_VERSION 1.2.1
-ENV GRPC_WEB https://github.com/grpc/grpc-web/releases/download/${GRPC_WEB_VERSION}/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64
-RUN curl ${GRPC_WEB} -o /usr/local/bin/protoc-gen-grpc-web && \
-    chmod +x /usr/local/bin/protoc-gen-grpc-web
+RUN go get -v github.com/golang/protobuf/protoc-gen-go && \
+	go get -v google.golang.org/grpc/cmd/protoc-gen-go-grpc && \
+	go get -v github.com/grpc/grpc-web
 
 ## cleanup
 RUN rm -rf /tmp/* /var/lib/apt/lists/*
