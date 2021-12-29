@@ -27,7 +27,7 @@ RUN curl -L ${PROTO_URL} -o /tmp/protoc.zip && \
 
 ENV BUF_VERSION 1.0.0-rc10
 ENV BUF_URL https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)
-RUN curl -sSL \
+RUN curl -L \
     ${BUF_URL} \
     -o "/usr/local/bin/buf" && \
   chmod +x "/usr/local/bin/buf"
