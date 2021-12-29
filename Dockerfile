@@ -1,6 +1,6 @@
 FROM ubuntu:latest AS builder
 
-ENV URL https://dl.google.com/go/go1.16.3.linux-amd64.tar.gz
+ENV GO_URL https://dl.google.com/go/go1.17.5.linux-amd64.tar.gz
 
 ENV GOPATH /golang
 ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin/
@@ -14,16 +14,23 @@ RUN apt-get update -y && \
     unzip
 
 ## install go binary
-RUN curl -L $URL -o /tmp/golang.tar.gz && \
+RUN curl -L ${GO_URL} -o /tmp/golang.tar.gz && \
     tar -C /usr/local -xzf /tmp/golang.tar.gz
 
 
-ENV PROTO_VERSION 3.15.8
-ENV URL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip
+ENV PROTO_VERSION 3.19.1
+ENV PROTO_URL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip
 
-RUN curl -L ${URL} -o /tmp/protoc.zip && \
+RUN curl -L ${PROTO_URL} -o /tmp/protoc.zip && \
     unzip /tmp/protoc.zip -d /usr/local/ -x readme.txt && \
     chmod +x /usr/local/bin/protoc
+
+ENV BUF_VERSION 1.0.0-rc10
+ENV BUF_URL https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)
+RUN curl -sSL \
+    ${BUF_URL} \
+    -o "/usr/local/bin/buf" && \
+  chmod +x "/usr/local/bin/buf"
 
 ## gopls
 RUN go get -v golang.org/x/tools/gopls
